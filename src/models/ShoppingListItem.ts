@@ -11,9 +11,13 @@ interface ShoppingListItemAttributes {
   updatedAt?: Date;
 }
 
-interface ShoppingListItemCreationAttributes extends Optional<ShoppingListItemAttributes, 'id' | 'price'> {}
+interface ShoppingListItemCreationAttributes
+  extends Optional<ShoppingListItemAttributes, 'id' | 'price'> {}
 
-class ShoppingListItem extends Model<ShoppingListItemAttributes, ShoppingListItemCreationAttributes> implements ShoppingListItemAttributes {
+class ShoppingListItem
+  extends Model<ShoppingListItemAttributes, ShoppingListItemCreationAttributes>
+  implements ShoppingListItemAttributes
+{
   public id!: number;
   public shopping_list_id!: number;
   public product_id!: number;
@@ -53,7 +57,7 @@ ShoppingListItem.init(
     modelName: 'ShoppingListItem',
     tableName: 'shopping_list_items',
     timestamps: true,
-  }
+  },
 );
 
-export default ShoppingListItem; 
+export default ShoppingListItem;

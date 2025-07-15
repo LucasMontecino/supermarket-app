@@ -7,9 +7,13 @@ interface ShoppingListAttributes {
   updatedAt?: Date;
 }
 
-interface ShoppingListCreationAttributes extends Optional<ShoppingListAttributes, 'id'> {}
+interface ShoppingListCreationAttributes
+  extends Optional<ShoppingListAttributes, 'id'> {}
 
-class ShoppingList extends Model<ShoppingListAttributes, ShoppingListCreationAttributes> implements ShoppingListAttributes {
+class ShoppingList
+  extends Model<ShoppingListAttributes, ShoppingListCreationAttributes>
+  implements ShoppingListAttributes
+{
   public id!: number;
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
@@ -28,7 +32,7 @@ ShoppingList.init(
     modelName: 'ShoppingList',
     tableName: 'shopping_lists',
     timestamps: true,
-  }
+  },
 );
 
-export default ShoppingList; 
+export default ShoppingList;

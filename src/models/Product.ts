@@ -9,9 +9,13 @@ interface ProductAttributes {
   updatedAt?: Date;
 }
 
-interface ProductCreationAttributes extends Optional<ProductAttributes, 'id' | 'last_price'> {}
+interface ProductCreationAttributes
+  extends Optional<ProductAttributes, 'id' | 'last_price'> {}
 
-class Product extends Model<ProductAttributes, ProductCreationAttributes> implements ProductAttributes {
+class Product
+  extends Model<ProductAttributes, ProductCreationAttributes>
+  implements ProductAttributes
+{
   public id!: number;
   public name!: string;
   public last_price!: number | null;
@@ -40,7 +44,7 @@ Product.init(
     modelName: 'Product',
     tableName: 'products',
     timestamps: true,
-  }
+  },
 );
 
-export default Product; 
+export default Product;

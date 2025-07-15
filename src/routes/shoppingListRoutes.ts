@@ -10,6 +10,9 @@ router.delete('/:id', shoppingListController.deleteShoppingList);
 // Shopping list items
 router.post('/:listId/items', shoppingListController.addItemToList);
 router.put('/:listId/items/:itemId', shoppingListController.updateItemInList);
-router.delete('/:listId/items/:itemId', shoppingListController.removeItemFromList);
+router.delete(
+  '/:listId/items/:itemId',
+  shoppingListController.removeItemFromList,
+);
 
-export default router; 
+export default router;
