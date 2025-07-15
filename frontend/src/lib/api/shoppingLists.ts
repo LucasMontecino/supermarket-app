@@ -1,5 +1,5 @@
 import api from '../api';
-import { ShoppingList, AddItemRequest, UpdateItemRequest } from '@/types';
+import { ShoppingList, AddItemRequest, UpdateItemRequest, ShoppingListItem } from '@/types';
 
 export const shoppingListsApi = {
   getAll: async (): Promise<ShoppingList[]> => {
@@ -16,12 +16,12 @@ export const shoppingListsApi = {
     await api.delete(`/shopping-lists/${id}`);
   },
 
-  addItem: async (listId: number, data: AddItemRequest): Promise<any> => {
+  addItem: async (listId: number, data: AddItemRequest): Promise<ShoppingListItem> => {
     const response = await api.post(`/shopping-lists/${listId}/items`, data);
     return response.data;
   },
 
-  updateItem: async (listId: number, itemId: number, data: UpdateItemRequest): Promise<any> => {
+  updateItem: async (listId: number, itemId: number, data: UpdateItemRequest): Promise<ShoppingListItem> => {
     const response = await api.put(`/shopping-lists/${listId}/items/${itemId}`, data);
     return response.data;
   },

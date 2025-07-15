@@ -1,8 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { ShoppingCart, Plus, Trash2, Edit, X } from 'lucide-react';
-import { Product, ShoppingList, ShoppingListItem } from '@/types';
+import { ShoppingCart, Plus, Trash2, X } from 'lucide-react';
+import { Product, ShoppingList } from '@/types';
 import { productsApi } from '@/lib/api/products';
 import { shoppingListsApi } from '@/lib/api/shoppingLists';
 
