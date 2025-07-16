@@ -240,22 +240,15 @@ export default function ShoppingListDetailPage() {
                   <label className="block text-sm font-medium text-black mb-1">
                     Quantity
                   </label>
-                  <input
-                    type="number"
-                    min="1"
-                    step="1"
-                    inputMode="numeric"
-                    pattern="[0-9]*"
-                    autoComplete="off"
-                    placeholder="1"
+                  <select
                     value={itemQuantity}
-                    onChange={(e) => {
-                      // Remove leading zeros and non-digit characters
-                      const val = e.target.value.replace(/^0+/, '').replace(/\D/g, '');
-                      setItemQuantity(val ? Number(val) : 1);
-                    }}
+                    onChange={(e) => setItemQuantity(Number(e.target.value))}
                     className="w-full text-black px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  />
+                  >
+                    <option value={1}>1</option>
+                    <option value={2}>2</option>
+                    <option value={3}>3</option>
+                  </select>
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-black mb-1">
