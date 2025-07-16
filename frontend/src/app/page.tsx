@@ -14,7 +14,7 @@ export default function LandingPage() {
   }, []);
 
   return (
-    <div className="relative min-h-screen flex flex-col items-center justify-center">
+    <div className="relative min-h-dvh flex flex-col items-center justify-center">
       {/* Background image */}
       <div className="absolute inset-0">
         <Image
@@ -22,7 +22,7 @@ export default function LandingPage() {
           alt="Landing background"
           fill
           sizes="100vw"
-          style={{ objectFit: "contain" }}
+          style={{ objectFit: "cover" }}
           priority
         />
       </div>
