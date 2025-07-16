@@ -1,28 +1,44 @@
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import { ShoppingList, ShoppingListItem, Product } from '../models';
+import {
+  NewShoppingListSchema,
+  UpdateShoppingListItemSchema,
+} from '../schemas';
 
-export const getAllShoppingLists = async (_req: Request, res: Response) => {
+export const getAllShoppingLists = async (
+  _req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const lists = await ShoppingList.findAll({
       include: [{ model: ShoppingListItem, as: 'items', include: [Product] }],
       order: [['createdAt', 'DESC']],
     });
     res.json(lists);
-  } catch (error) {
-    res.status(500).json({ error: 'Failed to fetch shopping lists' });
+  } catch (error: unknown) {
+    next(error);
   }
 };
 
-export const createShoppingList = async (_req: Request, res: Response) => {
+export const createShoppingList = async (
+  _req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const list = await ShoppingList.create();
     res.status(201).json(list);
-  } catch (error) {
-    res.status(500).json({ error: 'Failed to create shopping list' });
+  } catch (error: unknown) {
+    next(error);
   }
 };
 
-export const deleteShoppingList = async (req: Request, res: Response) => {
+export const deleteShoppingList = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const { id } = req.params;
     const list = await ShoppingList.findByPk(id);
@@ -32,15 +48,21 @@ export const deleteShoppingList = async (req: Request, res: Response) => {
     }
     await list.destroy();
     res.status(204).send();
-  } catch (error) {
-    res.status(500).json({ error: 'Failed to delete shopping list' });
+  } catch (error: unknown) {
+    next(error);
   }
 };
 
-export const addItemToList = async (req: Request, res: Response) => {
+export const addItemToList = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const { listId } = req.params;
-    const { product_id, quantity, price } = req.body;
+    const { product_id, quantity, price } = NewShoppingListSchema.parse(
+      req.body,
+    );
     const item = await ShoppingListItem.create({
       shopping_list_id: Number(listId),
       product_id,
@@ -48,15 +70,20 @@ export const addItemToList = async (req: Request, res: Response) => {
       price,
     });
     res.status(201).json(item);
-  } catch (error) {
-    res.status(500).json({ error: 'Failed to add item to list' });
+    return;
+  } catch (error: unknown) {
+    next(error);
   }
 };
 
-export const updateItemInList = async (req: Request, res: Response) => {
+export const updateItemInList = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const { itemId } = req.params;
-    const { quantity, price } = req.body;
+    const { quantity, price } = UpdateShoppingListItemSchema.parse(req.body);
     const item = await ShoppingListItem.findByPk(itemId);
     if (!item) {
       res.status(404).json({ error: 'Item not found' });
@@ -66,12 +93,17 @@ export const updateItemInList = async (req: Request, res: Response) => {
     item.price = price ?? item.price;
     await item.save();
     res.json(item);
-  } catch (error) {
-    res.status(500).json({ error: 'Failed to update item' });
+    return;
+  } catch (error: unknown) {
+    next(error);
   }
 };
 
-export const removeItemFromList = async (req: Request, res: Response) => {
+export const removeItemFromList = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const { itemId } = req.params;
     const item = await ShoppingListItem.findByPk(itemId);
@@ -81,7 +113,7 @@ export const removeItemFromList = async (req: Request, res: Response) => {
     }
     await item.destroy();
     res.status(204).send();
-  } catch (error) {
-    res.status(500).json({ error: 'Failed to remove item' });
+  } catch (error: unknown) {
+    next(error);
   }
 };

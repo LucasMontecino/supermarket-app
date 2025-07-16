@@ -5,6 +5,7 @@ import sequelize from './config/database';
 import './models';
 import productRoutes from './routes/productRoutes';
 import shoppingListRoutes from './routes/shoppingListRoutes';
+import { errorHandler, unknownEndpoint } from './middlewares';
 
 const app = express();
 
@@ -17,6 +18,9 @@ app.get('/health', (_req: Request, res: Response) => {
 
 app.use('/api/products', productRoutes);
 app.use('/api/shopping-lists', shoppingListRoutes);
+
+app.use(unknownEndpoint);
+app.use(errorHandler);
 
 sequelize
   .sync()

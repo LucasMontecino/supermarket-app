@@ -1,44 +1,62 @@
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import { Product } from '../models';
+import { NewProductSchema, UpdateProductSchema } from '../schemas';
 
-export const getAllProducts = async (_req: Request, res: Response) => {
+export const getAllProducts = async (
+  _req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const products = await Product.findAll();
     res.json(products);
-  } catch (error) {
-    res.status(500).json({ error: 'Failed to fetch products' });
+    return;
+  } catch (error: unknown) {
+    next(error);
   }
 };
 
-export const createProduct = async (req: Request, res: Response) => {
+export const createProduct = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
-    const { name, last_price } = req.body;
-    const product = await Product.create({ name, last_price });
+    const newProduct = NewProductSchema.parse(req.body);
+    const product = await Product.create(newProduct);
     res.status(201).json(product);
-  } catch (error) {
-    res.status(500).json({ error: 'Failed to create product' });
+  } catch (error: unknown) {
+    next(error);
   }
 };
 
-export const updateProduct = async (req: Request, res: Response) => {
+export const updateProduct = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const { id } = req.params;
-    const { name, last_price } = req.body;
+    const updatedProduct = UpdateProductSchema.parse(req.body);
     const product = await Product.findByPk(id);
     if (!product) {
       res.status(404).json({ error: 'Product not found' });
       return;
     }
-    product.name = name ?? product.name;
-    product.last_price = last_price ?? product.last_price;
+    product.name = updatedProduct.name ?? product.name;
+    product.last_price = updatedProduct.last_price ?? product.last_price;
     await product.save();
     res.json(product);
-  } catch (error) {
-    res.status(500).json({ error: 'Failed to update product' });
+  } catch (error: unknown) {
+    next(error);
   }
 };
 
-export const deleteProduct = async (req: Request, res: Response) => {
+export const deleteProduct = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const { id } = req.params;
     const product = await Product.findByPk(id);
@@ -48,7 +66,7 @@ export const deleteProduct = async (req: Request, res: Response) => {
     }
     await product.destroy();
     res.status(204).send();
-  } catch (error) {
-    res.status(500).json({ error: 'Failed to delete product' });
+  } catch (error: unknown) {
+    next(error);
   }
 };

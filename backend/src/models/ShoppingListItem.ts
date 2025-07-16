@@ -11,6 +11,7 @@ interface ShoppingListItemAttributes {
   updatedAt?: Date;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 interface ShoppingListItemCreationAttributes
   extends Optional<ShoppingListItemAttributes, 'id' | 'price'> {}
 

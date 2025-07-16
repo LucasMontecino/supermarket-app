@@ -9,6 +9,7 @@ interface ProductAttributes {
   updatedAt?: Date;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 interface ProductCreationAttributes
   extends Optional<ProductAttributes, 'id' | 'last_price'> {}
 
