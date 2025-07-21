@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
-import { useRouter, useParams } from "next/navigation";
-import { ShoppingCart, Trash2, X } from "lucide-react";
-import { Product, ShoppingList } from "@/types";
-import { productsApi } from "@/lib/api/products";
-import { shoppingListsApi } from "@/lib/api/shoppingLists";
+import { useEffect, useState } from 'react';
+import { useRouter, useParams } from 'next/navigation';
+import { CircleArrowLeft, Plus, ShoppingCart, Trash2, X } from 'lucide-react';
+import { Product, ShoppingList } from '@/types';
+import { productsApi } from '@/lib/api/products';
+import { shoppingListsApi } from '@/lib/api/shoppingLists';
 
 export default function ShoppingListDetailPage() {
   const router = useRouter();
@@ -17,14 +17,14 @@ export default function ShoppingListDetailPage() {
   const [showAddItem, setShowAddItem] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<number>(0);
   const [itemQuantity, setItemQuantity] = useState(1);
-  const [itemPrice, setItemPrice] = useState("");
+  const [itemPrice, setItemPrice] = useState('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     loadProducts();
     loadList();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [listId]);
 
   const loadProducts = async () => {
@@ -35,9 +35,9 @@ export default function ShoppingListDetailPage() {
       setProducts(data);
     } catch (error: unknown) {
       if (error instanceof Error) setError(error.message);
-      else setError("Failed to load products");
-    }finally{
-        setLoading(false);
+      else setError('Failed to load products');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -50,7 +50,7 @@ export default function ShoppingListDetailPage() {
       setList(found || null);
     } catch (err: unknown) {
       if (err instanceof Error) setError(err.message);
-      else setError("Failed to load shopping list");
+      else setError('Failed to load shopping list');
     } finally {
       setLoading(false);
     }
@@ -63,10 +63,10 @@ export default function ShoppingListDetailPage() {
       if (product && product.last_price != null) {
         setItemPrice(product.last_price.toString());
       } else {
-        setItemPrice("");
+        setItemPrice('');
       }
     } else {
-      setItemPrice("");
+      setItemPrice('');
     }
   }, [selectedProduct, products]);
 
@@ -81,11 +81,11 @@ export default function ShoppingListDetailPage() {
       await loadList();
       setSelectedProduct(0);
       setItemQuantity(1);
-      setItemPrice("");
+      setItemPrice('');
       setShowAddItem(false);
     } catch (error: unknown) {
       if (error instanceof Error) setError(error.message);
-      else setError("Failed to add item to list");
+      else setError('Failed to add item to list');
     }
   };
 
@@ -96,7 +96,7 @@ export default function ShoppingListDetailPage() {
       await loadList();
     } catch (error: unknown) {
       if (error instanceof Error) setError(error.message);
-      else setError("Failed to remove item from list");
+      else setError('Failed to remove item from list');
     }
   };
 
@@ -104,62 +104,65 @@ export default function ShoppingListDetailPage() {
     if (!list) return;
     try {
       await shoppingListsApi.delete(list.id);
-      router.push("/lists");
+      router.push('/lists');
     } catch (error: unknown) {
       if (error instanceof Error) setError(error.message);
-      else setError("Failed to delete list");
+      else setError('Failed to delete list');
     }
   };
 
   const getProductName = (productId: number) => {
     const product = products.find((p) => p.id === productId);
-    return product?.name || "Unknown Product";
+    return product?.name || 'Unknown Product';
   };
 
   // Calculate total price for current list
-  const totalPrice = list?.items?.reduce((sum, item) => {
-    if (item.price != null) {
-      return sum + item.price * item.quantity;
-    }
-    return sum;
-  }, 0) ?? 0;
+  const totalPrice =
+    list?.items?.reduce((sum, item) => {
+      if (item.price != null) {
+        return sum + item.price * item.quantity;
+      }
+      return sum;
+    }, 0) ?? 0;
 
   return (
     <div className="min-h-screen bg-gray-50">
       <header className="bg-white shadow-sm border-b">
         <div className="max-w-md mx-auto px-4 py-4 flex items-center justify-between">
           <button
-            onClick={() => router.push("/lists")}
-            className="px-3 py-1 bg-gray-200 text-black text-sm rounded-md hover:bg-gray-300 transition-colors"
+            onClick={() => router.push('/lists')}
+            className="px-3 py-1 bg-gray-200 text-black text-sm rounded-md hover:bg-gray-300 transition-colors cursor-pointer"
           >
-            Back
+            <CircleArrowLeft className="w-6 h-6" />
           </button>
           <h1 className="text-xl font-bold text-black flex items-center gap-2">
             <ShoppingCart className="w-6 h-6 text-blue-600" />
-            Shopping List #{listId}
+            Lista #{listId}
           </h1>
           <button
             onClick={deleteList}
             className="px-3 py-1 bg-red-600 text-white text-sm rounded-md hover:bg-red-700 transition-colors"
           >
-            Delete List
+            <Trash2 className="w-6 h-6" />
           </button>
         </div>
       </header>
       <main className="max-w-md mx-auto px-4 py-6">
         {loading ? (
-          <div className="text-center text-black">Loading...</div>
+          <div className="text-center text-black">Cargando...</div>
         ) : error ? (
           <div className="text-center text-red-600">{error}</div>
         ) : list ? (
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <h2 className="text-lg font-semibold text-black">List Items</h2>
+              <h2 className="text-lg font-semibold text-black">
+                Items de la lista
+              </h2>
               <button
                 onClick={() => setShowAddItem(true)}
                 className="px-3 py-1 bg-green-600 text-white text-sm rounded-md hover:bg-green-700 transition-colors"
               >
-                Add Item
+                <Plus className="w-6 h-6" />
               </button>
             </div>
             {/* List Items */}
@@ -168,13 +171,16 @@ export default function ShoppingListDetailPage() {
                 <>
                   <div className="divide-y">
                     {list.items.map((item) => (
-                      <div key={item.id} className="p-4 flex items-center justify-between">
+                      <div
+                        key={item.id}
+                        className="p-4 flex items-center justify-between"
+                      >
                         <div className="flex-1">
                           <h3 className="font-medium text-black">
                             {getProductName(item.product_id)}
                           </h3>
                           <p className="text-sm text-black">
-                            Qty: {item.quantity}
+                            Cant.: {item.quantity}
                             {item.price && ` • $${item.price.toFixed(2)}`}
                           </p>
                         </div>
@@ -189,20 +195,22 @@ export default function ShoppingListDetailPage() {
                   </div>
                   {/* Total Price */}
                   <div className="p-4 border-t flex justify-end">
-                    <span className="font-semibold text-black">Total: ${totalPrice.toFixed(2)}</span>
+                    <span className="font-semibold text-black">
+                      Total: ${totalPrice.toFixed(2)}
+                    </span>
                   </div>
                 </>
               ) : (
                 <div className="p-8 text-center text-black">
                   <ShoppingCart className="w-12 h-12 mx-auto mb-4 text-gray-300" />
-                  <p>Your shopping list is empty</p>
-                  <p className="text-sm">Add some items to get started!</p>
+                  <p>Tu lista de compras está vacía</p>
+                  <p className="text-sm">Agrega algunos items para empezar!</p>
                 </div>
               )}
             </div>
           </div>
         ) : (
-          <div className="text-center text-black">List not found.</div>
+          <div className="text-center text-black">Lista no encontrada.</div>
         )}
 
         {/* Add Item Modal */}
@@ -210,7 +218,9 @@ export default function ShoppingListDetailPage() {
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
             <div className="bg-white rounded-lg p-6 w-full max-w-sm">
               <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-semibold text-black">Add Item to List</h3>
+                <h3 className="text-lg font-semibold text-black">
+                  Agregar item a la lista
+                </h3>
                 <button
                   onClick={() => setShowAddItem(false)}
                   className="text-gray-400 hover:text-gray-600"
@@ -221,14 +231,14 @@ export default function ShoppingListDetailPage() {
               <div className="space-y-4">
                 <div>
                   <label className="block text-sm font-medium text-black mb-1">
-                    Product
+                    Producto
                   </label>
                   <select
                     value={selectedProduct}
                     onChange={(e) => setSelectedProduct(Number(e.target.value))}
                     className="w-full text-black px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   >
-                    <option value={0}>Select a product</option>
+                    <option value={0}>Selecciona un producto</option>
                     {products.map((product) => (
                       <option key={product.id} value={product.id}>
                         {product.name}
@@ -238,7 +248,7 @@ export default function ShoppingListDetailPage() {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-black mb-1">
-                    Quantity
+                    Cantidad
                   </label>
                   <select
                     value={itemQuantity}
@@ -252,7 +262,7 @@ export default function ShoppingListDetailPage() {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-black mb-1">
-                    Price (optional)
+                    Precio (opcional)
                   </label>
                   <input
                     type="number"
@@ -268,7 +278,7 @@ export default function ShoppingListDetailPage() {
                   disabled={!selectedProduct}
                   className="w-full py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed"
                 >
-                  Add to List
+                  Agregar a la lista
                 </button>
               </div>
             </div>
@@ -277,4 +287,4 @@ export default function ShoppingListDetailPage() {
       </main>
     </div>
   );
-} 
+}
