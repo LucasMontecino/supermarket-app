@@ -23,10 +23,17 @@ export const createProduct = async (
 ) => {
   try {
     const newProduct = NewProductSchema.parse(req.body);
+    const findProduct = await Product.findOne({
+      where: { name: newProduct.name },
+    });
+    if (findProduct)
+      return res
+        .status(400)
+        .json({ error: 'Product already exist in the db!' });
     const product = await Product.create(newProduct);
-    res.status(201).json(product);
+    return res.status(201).json(product);
   } catch (error: unknown) {
-    next(error);
+    return next(error);
   }
 };
 
